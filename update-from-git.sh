@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Создаем директорию для логов
-mkdir -p ./logs
-
 # Останавливаем и удаляем старые контейнеры
 docker stop instance-1 instance-2 2>/dev/null
 docker rm instance-1 instance-2 2>/dev/null
+
+# Получаем последние изменения из git
+git pull
 
 # Собираем новый образ
 docker build -t test:latest .
@@ -26,8 +26,6 @@ docker run -dp 3002:1234 \
     --name instance-2 \
     test:latest
 
-# Создаем тестовый файл в директории логов
-echo "Test file content" > ./logs/test.txt
-
-echo "docker exec -it instance-1 sh -c 'ls -l /usr/src/app/logs'"
-echo "docker exec -it instance-2 sh -c 'ls -l /usr/src/app/logs'" 
+echo "Containers updated and started. You can access them at:"
+echo "Instance 1: http://localhost:3001"
+echo "Instance 2: http://localhost:3002" 
